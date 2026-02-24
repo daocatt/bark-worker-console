@@ -20,7 +20,8 @@
 		{
 			"binding": "database",
 			"database_name": "database-bark",
-			"database_id": "<unique-ID-for-your-database>" // The user's ID
+			"database_id": "<unique-ID-for-your-database>", // The user's ID
+			"migrations_dir": "drizzle/migrations"
 		}
 	]
 	/**
