@@ -74,27 +74,27 @@ export default function Register() {
     const isDisabled = loaderData?.RegistrationDisabled;
 
     return (
-        <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-neutral-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+        <div className="flex items-center justify-center p-4">
+            <div className="w-full max-w-md bg-white border-2 border-emerald-200 rounded-lg p-8 shadow-[8px_8px_0_0_rgba(16,185,129,0.15)] my-12 transition-all">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 mb-6 shadow-lg shadow-blue-500/30">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-md bg-emerald-500 mb-6 border-2 border-emerald-700 shadow-[2px_2px_0_0_rgba(4,120,87,1)]">
                         <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                         </svg>
                     </div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-neutral-400 bg-clip-text text-transparent">Create Account</h1>
-                    <p className="text-neutral-400 mt-2">Join to manage your Bark keys</p>
+                    <h1 className="text-3xl font-bold text-emerald-950">Create Account</h1>
+                    <p className="text-emerald-700 font-medium mt-2">Join to manage your Bark keys</p>
                 </div>
 
                 {isDisabled ? (
-                    <div className="text-center p-6 bg-red-500/10 border border-red-500/20 rounded-xl">
-                        <p className="text-red-400 font-medium">Registration is currently disabled by administrators.</p>
+                    <div className="text-center p-6 bg-red-50 border-2 border-red-200 rounded-md">
+                        <p className="text-red-600 font-bold">Registration is currently disabled by administrators.</p>
                     </div>
                 ) : (
                     <Form method="post" className="space-y-6">
                         {actionData?.error && (
-                            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-4 rounded-xl flex items-center gap-3">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="bg-red-50 border-2 border-red-200 text-red-600 font-bold text-sm p-4 rounded-md flex items-center gap-3">
+                                <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                                 {actionData.error}
@@ -105,7 +105,7 @@ export default function Register() {
                             <div>
                                 <label
                                     htmlFor="username"
-                                    className="block text-sm font-medium text-neutral-300 mb-2"
+                                    className="block text-sm font-bold text-emerald-800 mb-2"
                                 >
                                     Username
                                 </label>
@@ -115,7 +115,7 @@ export default function Register() {
                                     type="text"
                                     autoComplete="username"
                                     required
-                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white placeholder-neutral-500 outline-none"
+                                    className="w-full px-4 py-3 bg-white border-2 border-emerald-200 rounded-md focus:border-emerald-500 focus:shadow-[2px_2px_0_0_rgba(16,185,129,0.3)] transition-all text-emerald-950 font-medium placeholder-emerald-300 outline-none"
                                     placeholder="Choose a username"
                                 />
                             </div>
@@ -123,7 +123,7 @@ export default function Register() {
                             <div>
                                 <label
                                     htmlFor="password"
-                                    className="block text-sm font-medium text-neutral-300 mb-2"
+                                    className="block text-sm font-bold text-emerald-800 mb-2"
                                 >
                                     Password
                                 </label>
@@ -133,7 +133,7 @@ export default function Register() {
                                     type="password"
                                     autoComplete="new-password"
                                     required
-                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white placeholder-neutral-500 outline-none"
+                                    className="w-full px-4 py-3 bg-white border-2 border-emerald-200 rounded-md focus:border-emerald-500 focus:shadow-[2px_2px_0_0_rgba(16,185,129,0.3)] transition-all text-emerald-950 font-medium placeholder-emerald-300 outline-none"
                                     placeholder="Create a password (min 6 chars)"
                                 />
                             </div>
@@ -142,16 +142,16 @@ export default function Register() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium py-3 px-4 rounded-xl transition-all shadow-lg shadow-blue-500/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 px-4 rounded-md transition-all border-2 border-emerald-700 shadow-[3px_3px_0_0_rgba(4,120,87,1)] active:translate-y-1 active:translate-x-1 active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:translate-x-0 disabled:active:shadow-[3px_3px_0_0_rgba(4,120,87,1)]"
                         >
                             {isSubmitting ? "Creating account..." : "Sign Up"}
                         </button>
                     </Form>
                 )}
 
-                <p className="text-center text-neutral-400 mt-8">
+                <p className="text-center text-emerald-700 font-medium mt-8">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                    <Link to="/login" className="text-emerald-500 hover:text-emerald-600 transition-colors font-bold underline decoration-emerald-500/30 underline-offset-4">
                         Sign in
                     </Link>
                 </p>

@@ -121,22 +121,22 @@ export default function Home() {
   const isPassSuccess = actionData?.intent === "change_password" && actionData.success;
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-300 font-sans p-4 sm:p-8">
+    <div className="p-4 sm:p-8 font-sans">
       <div className="max-w-4xl mx-auto space-y-8">
 
         {/* Header */}
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-neutral-800/50 backdrop-blur-xl p-6 rounded-3xl border border-white/5 shadow-xl">
+        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border-2 border-emerald-200 shadow-[4px_4px_0_0_rgba(16,185,129,0.15)] transition-all">
           <div className="flex gap-4 items-center">
-            <span className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <span className="w-12 h-12 rounded-md bg-emerald-500 flex items-center justify-center border-2 border-emerald-700 shadow-[2px_2px_0_0_rgba(4,120,87,1)]">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </span>
             <div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">
+              <h1 className="text-2xl font-bold text-emerald-950 tracking-tight">
                 Hello, {user.username}
               </h1>
-              <p className="text-sm text-neutral-400 mt-0.5">
+              <p className="text-sm font-medium text-emerald-600/80 mt-0.5">
                 {user.role === "admin" ? "Administrator Account" : "Standard User Account"}
               </p>
             </div>
@@ -144,12 +144,12 @@ export default function Home() {
 
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
             {user.role === "admin" && (
-              <Link to="/admin" className="px-5 py-2.5 bg-neutral-700/50 hover:bg-neutral-600/50 text-neutral-200 rounded-xl text-sm font-medium transition-all border border-white/10 active:scale-95 shadow-md">
+              <Link to="/admin" className="px-5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-md text-sm font-bold transition-all border-2 border-emerald-200 shadow-[2px_2px_0_0_rgba(16,185,129,0.2)] active:translate-y-1 active:translate-x-1 active:shadow-none">
                 Admin Panel
               </Link>
             )}
             <Form action="/logout" method="post">
-              <button className="px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl text-sm font-medium transition-all border border-red-500/20 active:scale-95 shadow-md">
+              <button className="px-5 py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-md text-sm font-bold transition-all border-2 border-red-200 shadow-[2px_2px_0_0_rgba(239,68,68,0.2)] active:translate-y-1 active:translate-x-1 active:shadow-none">
                 Sign Out
               </button>
             </Form>
@@ -160,42 +160,42 @@ export default function Home() {
 
           {/* Main Content - Device Keys */}
           <div className="md:col-span-2 space-y-6">
-            <section className="bg-neutral-800/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-xl">
+            <section className="bg-white p-6 rounded-lg border-2 border-emerald-200 shadow-[4px_4px_0_0_rgba(16,185,129,0.15)]">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-white">Your Device Keys</h2>
-                <span className="text-sm px-3 py-1 bg-neutral-900 rounded-lg border border-white/5 font-mono text-neutral-400 shadow-inner">
+                <h2 className="text-xl font-bold text-emerald-950">Your Device Keys</h2>
+                <span className="text-sm px-3 py-1 bg-emerald-50 rounded-md border-2 border-emerald-200 font-mono font-bold text-emerald-700">
                   {userKeys.length} / 5 Used
                 </span>
               </div>
 
               {userKeys.length === 0 ? (
-                <div className="text-center py-12 bg-neutral-900/50 rounded-2xl border border-dashed border-white/10 mt-4">
-                  <div className="w-16 h-16 rounded-full bg-neutral-800/50 flex items-center justify-center mx-auto mb-4 border border-white/5">
-                    <svg className="w-8 h-8 text-neutral-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="text-center py-12 bg-white rounded-md border-2 border-dashed border-emerald-200 mt-4 shadow-[2px_2px_0_0_rgba(16,185,129,0.05)]">
+                  <div className="w-16 h-16 rounded-md bg-emerald-50 flex items-center justify-center mx-auto mb-4 border-2 border-emerald-100 shadow-[2px_2px_0_0_rgba(16,185,129,0.1)]">
+                    <svg className="w-8 h-8 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
                   </div>
-                  <p className="text-neutral-500">No device keys added yet.</p>
-                  <p className="text-neutral-600 text-sm mt-1">Add your first key below.</p>
+                  <p className="text-emerald-800 font-bold">No device keys added yet.</p>
+                  <p className="text-emerald-600/80 font-medium text-sm mt-1">Add your first key below.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {userKeys.map((key) => (
-                    <div key={key.deviceKey} className="group flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all cursor-default">
+                    <div key={key.deviceKey} className="group flex items-center justify-between p-4 bg-emerald-50/50 rounded-md border-2 border-emerald-100 hover:border-emerald-300 hover:shadow-[2px_2px_0_0_rgba(16,185,129,0.15)] transition-all cursor-default">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-white/5 flex items-center justify-center text-blue-500 shadow-inner">
+                        <div className="w-10 h-10 rounded-md bg-white border-2 border-emerald-200 flex items-center justify-center text-emerald-600 shadow-[2px_2px_0_0_rgba(16,185,129,0.1)]">
                           <svg className="w-5 h-5 opacity-70 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                           </svg>
                         </div>
-                        <code className="text-sm text-blue-300 font-mono tracking-wider">{key.deviceKey}</code>
+                        <code className="text-sm font-bold text-emerald-800 font-mono tracking-wider">{key.deviceKey}</code>
                       </div>
                       <Form method="post" onSubmit={(e) => {
                         if (!confirm('Permanently remove this key from your account?')) e.preventDefault();
                       }}>
                         <input type="hidden" name="intent" value="delete_key" />
                         <input type="hidden" name="deviceKey" value={key.deviceKey} />
-                        <button type="submit" className="p-2.5 text-neutral-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all shadow-sm">
+                        <button type="submit" className="p-2 border-2 border-transparent text-emerald-400 hover:text-red-600 hover:bg-red-50 hover:border-red-200 rounded-md transition-all shadow-sm">
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -207,12 +207,12 @@ export default function Home() {
               )}
 
               {userKeys.length < 5 && (
-                <Form method="post" className="mt-8 pt-8 border-t border-white/5">
+                <Form method="post" className="mt-8 pt-8 border-t-2 border-dashed border-emerald-100">
                   <input type="hidden" name="intent" value="add_key" />
-                  <h3 className="text-sm font-medium text-neutral-400 mb-4 px-1">Add New Device Key</h3>
+                  <h3 className="text-sm font-bold text-emerald-800 mb-4 px-1">Add New Device Key</h3>
 
-                  {isAddKeyError && <p className="text-red-400 text-sm mb-4 bg-red-500/10 p-3 rounded-xl border border-red-500/20">{actionData.error}</p>}
-                  {isAddKeySuccess && <p className="text-green-400 text-sm mb-4 bg-green-500/10 p-3 rounded-xl border border-green-500/20">{actionData.success}</p>}
+                  {isAddKeyError && <p className="text-red-600 font-medium text-sm mb-4 bg-red-50 py-2 px-3 rounded-md border-2 border-red-200">{actionData.error}</p>}
+                  {isAddKeySuccess && <p className="text-emerald-700 font-medium text-sm mb-4 bg-emerald-50 py-2 px-3 rounded-md border-2 border-emerald-200">{actionData.success}</p>}
 
                   <div className="flex gap-3 flex-col sm:flex-row">
                     <input
@@ -220,9 +220,9 @@ export default function Home() {
                       name="deviceKey"
                       required
                       placeholder="e.g. jBqX9w2z..."
-                      className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all font-mono text-sm shadow-inner"
+                      className="flex-1 bg-white border-2 border-emerald-200 rounded-md px-4 py-3 outline-none focus:border-emerald-500 focus:shadow-[2px_2px_0_0_rgba(16,185,129,0.3)] transition-all font-mono text-sm text-emerald-950 font-medium placeholder:text-emerald-300"
                     />
-                    <button type="submit" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-8 py-3 rounded-xl font-medium transition-all shadow-lg shadow-blue-500/20 active:scale-95 whitespace-nowrap">
+                    <button type="submit" className="bg-emerald-500 hover:bg-emerald-400 text-white px-8 py-3 rounded-md font-bold transition-all border-2 border-emerald-600 shadow-[3px_3px_0_0_rgba(4,120,87,1)] active:translate-y-1 active:translate-x-1 active:shadow-none whitespace-nowrap">
                       Add to Account
                     </button>
                   </div>
@@ -233,36 +233,36 @@ export default function Home() {
 
           {/* Sidebar - Settings */}
           <div className="space-y-6">
-            <section className="bg-neutral-800/40 backdrop-blur-xl border border-white/5 rounded-3xl p-6 shadow-xl sticky top-8">
-              <h2 className="text-lg font-semibold text-white mb-6">Security</h2>
+            <section className="bg-white p-6 rounded-lg border-2 border-emerald-200 shadow-[4px_4px_0_0_rgba(16,185,129,0.15)] sticky top-8">
+              <h2 className="text-lg font-bold text-emerald-950 mb-6">Security</h2>
 
               <Form method="post" className="space-y-5">
                 <input type="hidden" name="intent" value="change_password" />
 
-                {isPassError && <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-xl border border-red-500/20">{actionData.error}</p>}
-                {isPassSuccess && <p className="text-green-400 text-sm bg-green-500/10 p-3 rounded-xl border border-green-500/20">{actionData.success}</p>}
+                {isPassError && <p className="text-red-600 font-medium text-sm bg-red-50 py-2 px-3 rounded-md border-2 border-red-200">{actionData.error}</p>}
+                {isPassSuccess && <p className="text-emerald-700 font-medium text-sm bg-emerald-50 py-2 px-3 rounded-md border-2 border-emerald-200">{actionData.success}</p>}
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-2 uppercase tracking-wider px-1">Current Password</label>
+                  <label className="block text-xs font-bold text-emerald-700 mb-2 uppercase tracking-widest px-1">Current Password</label>
                   <input
                     type="password"
                     name="currentPassword"
                     required
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all text-sm shadow-inner"
+                    className="w-full bg-white border-2 border-emerald-200 rounded-md px-4 py-3 outline-none focus:border-emerald-500 focus:shadow-[2px_2px_0_0_rgba(16,185,129,0.3)] transition-all text-sm font-medium text-emerald-950"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-2 uppercase tracking-wider px-1">New Password</label>
+                  <label className="block text-xs font-bold text-emerald-700 mb-2 uppercase tracking-widest px-1">New Password</label>
                   <input
                     type="password"
                     name="newPassword"
                     required
                     minLength={6}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all text-sm shadow-inner"
+                    className="w-full bg-white border-2 border-emerald-200 rounded-md px-4 py-3 outline-none focus:border-emerald-500 focus:shadow-[2px_2px_0_0_rgba(16,185,129,0.3)] transition-all text-sm font-medium text-emerald-950"
                   />
                 </div>
                 <div className="pt-2">
-                  <button type="submit" className="w-full bg-neutral-700/50 hover:bg-neutral-600/50 border border-white/10 text-white px-4 py-3 rounded-xl font-medium transition-all active:scale-[0.98] shadow-md">
+                  <button type="submit" className="w-full bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 text-emerald-800 px-4 py-3 rounded-md font-bold transition-all shadow-[2px_2px_0_0_rgba(16,185,129,0.2)] active:translate-y-1 active:translate-x-1 active:shadow-none">
                     Update Password
                   </button>
                 </div>
