@@ -1,8 +1,17 @@
 # Bark Worker Console
 
+[中文版](./README.zh.md) | English
+
 A beautiful, modern React Router (Remix) console to manage devices and settings for the `bark-worker` Cloudflare Worker.
 
 ## Setup
+
+⚠️ **Important**: `bark-worker-console` MUST use the **same D1 database** as `bark-worker` to seamlessly synchronize and manage `device_keys` and permission settings.
+
+### Core Management Mechanism
+
+- **Registration Restriction**: Controlled via the `Allow Registration` toggle in the admin panel, stored in the `settings` table.
+- **Key Limit**: Each user can add up to **5** device keys, enforced by the console's backend.
 
 1. Copy your D1 database ID from `bark-worker`:
 
