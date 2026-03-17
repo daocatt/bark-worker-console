@@ -76,14 +76,14 @@ export default function Register() {
     return (
         <div className="flex items-center justify-center p-4">
             <div className="w-full max-w-md bg-white border-2 border-emerald-200 rounded-lg p-8 shadow-[8px_8px_0_0_rgba(16,185,129,0.15)] my-12 transition-all">
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-md bg-emerald-500 mb-6 border-2 border-emerald-700 shadow-[2px_2px_0_0_rgba(4,120,87,1)]">
-                        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                        </svg>
-                    </div>
-                    <h1 className="text-3xl font-bold text-emerald-950">Create Account</h1>
-                    <p className="text-emerald-700 font-medium mt-2">Join to manage your Bark keys</p>
+                <div className="text-center mb-10">
+                    <img 
+                        src="/bark-console-logo.png" 
+                        alt="Bark Logo" 
+                        className="w-20 h-20 mx-auto mb-6 drop-shadow-sm"
+                    />
+                    <h1 className="text-3xl font-extrabold text-emerald-950 tracking-tight">Create Account</h1>
+                    <p className="text-emerald-600/70 font-bold text-sm uppercase tracking-widest mt-2">Join to manage your Bark keys</p>
                 </div>
 
                 {isDisabled ? (
