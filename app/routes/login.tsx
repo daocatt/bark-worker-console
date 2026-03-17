@@ -73,7 +73,7 @@ export default function Login() {
                     <img 
                         src="/bark-console-logo.png" 
                         alt="Bark Logo" 
-                        className="w-20 h-20 mx-auto mb-6 drop-shadow-sm"
+                        className="w-20 h-20 mx-auto mb-6 bg-emerald-600 p-3 rounded-2xl border-2 border-emerald-500 shadow-lg"
                     />
                     <h1 className="text-3xl font-extrabold text-emerald-950 tracking-tight">Welcome Back</h1>
                     <p className="text-emerald-600/70 font-bold text-sm uppercase tracking-widest mt-2">Log in to your account</p>
