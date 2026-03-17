@@ -9,7 +9,7 @@ interface NavProps {
 
 export default function Nav({ user }: NavProps) {
   return (
-    <header className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+    <header className="bg-white p-6 rounded-lg border-2 border-emerald-200 shadow-[4px_4px_0_0_rgba(16,185,129,0.15)] transition-all mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
       <div className="flex items-center gap-4">
         <Link to="/" className="flex items-center gap-3.5 group">
           <div className="relative">
