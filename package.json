@@ -5,9 +5,9 @@
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
-		"db:migrate:remote": "wrangler d1 migrations apply database --remote",
-		"predeploy": "npm run db:migrate:remote",
-		"deploy": "npm run build && wrangler deploy",
+		"db:migrate:prod": "wrangler d1 migrations apply database_bark --remote --config wrangler.production.jsonc",
+		"predeploy": "npm run db:migrate:prod",
+		"deploy": "npm run build && wrangler deploy --config wrangler.production.jsonc",
 		"dev": "react-router dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "npm run build && vite preview",
