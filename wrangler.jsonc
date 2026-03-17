@@ -19,8 +19,8 @@
 	"d1_databases": [
 		{
 			"binding": "database",
-			"database_name": "database-bark",
-			"database_id": "<unique-ID-for-your-database>", // The user's ID
+			"database_name": "database_bark", // Copy from bark-worker's same D1 database
+			"database_id": "YOUR_D1_DATABASE_ID", // Copy from bark-worker's same D1 database
 			"migrations_dir": "drizzle/migrations"
 		}
 	]
