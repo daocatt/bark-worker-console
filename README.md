@@ -12,6 +12,7 @@ A beautiful, modern React Router (Remix) console to manage devices and settings 
 
 - **Registration Restriction**: Controlled via the `Allow Registration` toggle in the admin panel, stored in the `settings` table.
 - **Key Limit**: Each user can add up to **5** device keys, enforced by the console's backend.
+- **Auto Cleanup**: When `Force Registered Users` is enabled, the system can automatically delete unlinked device keys every 72 hours (must be toggled in System Settings).
 
 1. Copy your D1 database ID from `bark-worker`:
 
