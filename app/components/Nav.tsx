@@ -17,7 +17,7 @@ export default function Nav({ user }: NavProps) {
             <img 
               src="/bark-console-logo.png" 
               alt="Bark Logo" 
-              className="relative w-11 h-11 rounded-xl object-contain bg-emerald-50 p-1 border border-emerald-100 shadow-sm transition-transform group-hover:scale-105 duration-300"
+              className="relative w-11 h-11 rounded-xl object-contain bg-emerald-600 p-1.5 border-2 border-emerald-500 shadow-sm transition-transform group-hover:scale-105 duration-300"
             />
           </div>
           <div className="flex flex-col">

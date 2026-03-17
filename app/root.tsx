@@ -18,7 +18,7 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export const links: Route.LinksFunction = () => [
-  { rel: "icon", type: "image/png", href: "/bark-console-logo.png" },
+  { rel: "icon", type: "image/png", href: "/bark-console-fav.png" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
