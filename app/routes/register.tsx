@@ -1,4 +1,5 @@
 import { Form, useActionData, useLoaderData, useNavigation, Link, redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { useEffect, useRef } from "react";
 import bcrypt from "bcryptjs";
 import { getDb } from "../drizzle/db.server";
 import { users, settings } from "../drizzle/schema";
@@ -14,10 +15,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 
     const isRegistrationAllowed = allowRegSetting?.value !== "false";
 
-    if (!isRegistrationAllowed) {
-        return { RegistrationDisabled: true };
-    }
-    return { RegistrationDisabled: false };
+    return {
+        RegistrationDisabled: !isRegistrationAllowed,
+        hcaptchaSitekey: (context.cloudflare.env.HCAPTCHA_SITEKEY as string) || null,
+    };
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -37,6 +38,32 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     if (!username || !password || username.length < 3 || password.length < 6) {
         return { error: "Username must be at least 3 chars and password 6 chars" };
+    }
+
+    // Optional hCaptcha Token Verification
+    const hcaptchaSecret = context.cloudflare.env.HCAPTCHA_SECRET;
+    const hcaptchaSitekey = context.cloudflare.env.HCAPTCHA_SITEKEY;
+
+    if (hcaptchaSecret && hcaptchaSitekey) {
+        const captchaResponse = formData.get("h-captcha-response")?.toString();
+        if (!captchaResponse) {
+            return { error: "Please complete the CAPTCHA challenge" };
+        }
+
+        try {
+            const verifyUrl = "https://hcaptcha.com/siteverify";
+            const response = await fetch(verifyUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `secret=${encodeURIComponent(hcaptchaSecret)}&response=${encodeURIComponent(captchaResponse)}`,
+            });
+            const result = (await response.json()) as { success: boolean };
+            if (!result.success) {
+                return { error: "CAPTCHA verification failed. Please try again." };
+            }
+        } catch (err) {
+            return { error: "CAPTCHA verification service error. Please try again." };
+        }
     }
 
     const existingUser = await db.query.users.findFirst({
@@ -72,6 +99,63 @@ export default function Register() {
     const isSubmitting = navigation.state === "submitting";
 
     const isDisabled = loaderData?.RegistrationDisabled;
+    const hcaptchaSitekey = loaderData?.hcaptchaSitekey;
+    const captchaRef = useRef<HTMLDivElement>(null);
+    const widgetIdRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (!hcaptchaSitekey || isDisabled) return;
+
+        let isMounted = true;
+
+        const loadScriptAndRender = () => {
+            if (typeof window === "undefined") return;
+
+            // Define explicit onload callback
+            (window as any).onloadHCaptchaCallback = () => {
+                if (isMounted && captchaRef.current) {
+                    try {
+                        widgetIdRef.current = (window as any).hcaptcha.render(captchaRef.current, {
+                            sitekey: hcaptchaSitekey,
+                            theme: "light",
+                        });
+                    } catch (e) {
+                        console.error("hCaptcha render error:", e);
+                    }
+                }
+            };
+
+            if (!(window as any).hcaptcha) {
+                const script = document.createElement("script");
+                script.src = "https://js.hcaptcha.com/1/api.js?onload=onloadHCaptchaCallback&render=explicit";
+                script.async = true;
+                script.defer = true;
+                document.body.appendChild(script);
+            } else {
+                // If script already loaded, explicitly render the widget
+                if (captchaRef.current && (window as any).hcaptcha.render) {
+                    try {
+                        captchaRef.current.innerHTML = "";
+                        widgetIdRef.current = (window as any).hcaptcha.render(captchaRef.current, {
+                            sitekey: hcaptchaSitekey,
+                            theme: "light",
+                        });
+                    } catch (e) {
+                        console.error("hCaptcha explicit rerender error:", e);
+                    }
+                }
+            }
+        };
+
+        loadScriptAndRender();
+
+        return () => {
+            isMounted = false;
+            if (typeof window !== "undefined") {
+                delete (window as any).onloadHCaptchaCallback;
+            }
+        };
+    }, [hcaptchaSitekey, isDisabled]);
 
     return (
         <div className="flex items-center justify-center p-4">
@@ -138,6 +222,12 @@ export default function Register() {
                                 />
                             </div>
                         </div>
+
+                        {hcaptchaSitekey && (
+                            <div className="flex justify-center mb-6">
+                                <div ref={captchaRef}></div>
+                            </div>
+                        )}
 
                         <button
                             type="submit"

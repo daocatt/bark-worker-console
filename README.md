@@ -48,6 +48,22 @@ First, you need to apply the schemas to your production D1 database (make sure y
 npx wrangler d1 migrations apply database-bark --remote
 ```
 
+### Environment Configuration
+
+The console includes several security features configured via environment variables. Update them in `wrangler.jsonc` or set them as production Secrets in Cloudflare:
+
+1. **`JWT_SECRET`**: A high-entropy secret key used for signing session cookies. Generate a secure secret key via:
+   ```bash
+   openssl rand -base64 32
+   ```
+2. **`HCAPTCHA_SITEKEY`** & **`HCAPTCHA_SECRET`** (Optional): Provide these values to enable hCaptcha protection on registration and login forms. If left empty, hCaptcha is automatically disabled.
+
+To set secure variables as secrets in production:
+```bash
+npx wrangler secret put JWT_SECRET
+npx wrangler secret put HCAPTCHA_SECRET
+```
+
 **2. Deploy to Cloudflare**
 Build and deploy the React Router console to your Cloudflare account:
 
