@@ -46,6 +46,22 @@
 npx wrangler d1 migrations apply database-bark --remote
 ```
 
+### 环境变量配置
+
+控制台包含若干项通过环境变量配置的安全防护功能。请在 `wrangler.jsonc` 中进行更新，或在 Cloudflare 生产环境配置为机密数据（Secrets）：
+
+1. **`JWT_SECRET`**：用于对 Session Cookie 进行加密和签名的强随机密钥。你可以通过以下命令生成高熵的随机密钥：
+   ```bash
+   openssl rand -base64 32
+   ```
+2. **`HCAPTCHA_SITEKEY`** 和 **`HCAPTCHA_SECRET`**（可选）：配置这两项以在注册和登录页面启用 hCaptcha 验证码防刷。如果保留为空，系统会自动禁用验证码。
+
+在生产环境中将敏感参数配置为 Secrets：
+```bash
+npx wrangler secret put JWT_SECRET
+npx wrangler secret put HCAPTCHA_SECRET
+```
+
 **2. 部署到 Cloudflare**
 构建并将 React Router 控制台部署到你的 Cloudflare 账户：
 

@@ -8,7 +8,10 @@
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
 	"vars": {
-		"BARK_API_URL": ""
+		"BARK_API_URL": "",
+		"JWT_SECRET": "YOUR_JWT_SECRET_HERE",
+		"HCAPTCHA_SITEKEY": "",
+		"HCAPTCHA_SECRET": ""
 	},
 	"observability": {
 		"enabled": true
