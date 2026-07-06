@@ -53,7 +53,24 @@ function checkRateLimit(ip: string, limit: number, windowMs: number): boolean {
 
 export default {
   async fetch(request, env, ctx) {
-    // 1. IP-Based Sliding Window Rate Limiting
+    // 1. CSRF Protection: Verify Origin header on state-changing requests
+    if (request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS") {
+      const origin = request.headers.get("Origin");
+      const host = request.headers.get("Host");
+      if (origin && host) {
+        let originHost: string;
+        try {
+          originHost = new URL(origin).host;
+        } catch {
+          originHost = "";
+        }
+        if (originHost !== host) {
+          return new Response("Forbidden: CSRF check failed", { status: 403 });
+        }
+      }
+    }
+
+    // 2. IP-Based Sliding Window Rate Limiting
     const ip = request.headers.get("CF-Connecting-IP") || "127.0.0.1";
     const url = new URL(request.url);
     const isAuthRoutePost = (url.pathname === "/login" || url.pathname === "/register") && request.method === "POST";
