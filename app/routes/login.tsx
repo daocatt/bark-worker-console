@@ -90,6 +90,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     });
 
     if (!user) {
+        await bcrypt.hash("dummy-password-to-burn-cpu", 10);
         return { error: "Invalid username or password" };
     }
 
