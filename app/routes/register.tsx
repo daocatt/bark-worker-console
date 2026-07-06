@@ -36,8 +36,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const username = formData.get("username")?.toString();
     const password = formData.get("password")?.toString();
 
-    if (!username || !password || username.length < 3 || password.length < 6) {
-        return { error: "Username must be at least 3 chars and password 6 chars" };
+    if (!username || !password || username.length < 3 || password.length < 6 || username.length > 32 || password.length > 128) {
+        return { error: "Username must be 3-32 chars and password 6-128 chars" };
     }
 
     // Optional hCaptcha Token Verification
