@@ -112,7 +112,6 @@ export default {
       responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
     }
 
-    const nonce = crypto.randomUUID();
     responseHeaders.set(
       "Content-Security-Policy",
       "default-src 'self'; " +
