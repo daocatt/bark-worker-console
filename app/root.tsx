@@ -5,10 +5,18 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { requestContextStorage } from "./auth/context-storage";
 import "./app.css";
+
+export function loader() {
+  const store = requestContextStorage.getStore();
+  const nonce = store?.cspNonce || "";
+  return { nonce };
+}
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -32,6 +40,8 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
+  const nonce = data?.nonce || "";
   return (
     <html lang="en" className="light sm:scroll-smooth">
       <head>
@@ -57,8 +67,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </a>
           </div>
         </footer>
-        <ScrollRestoration />
-        <Scripts />
+        <ScrollRestoration nonce={nonce} />
+        <Scripts nonce={nonce} />
       </body>
     </html>
   );

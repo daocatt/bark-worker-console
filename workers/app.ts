@@ -91,8 +91,10 @@ export default {
       );
     }
 
-    // 2. Wrap the request inside requestContextStorage to bind variables for session handlers
-    const response = await requestContextStorage.run({ env }, () => {
+    const nonce = crypto.randomUUID();
+
+    // 3. Wrap the request inside requestContextStorage to bind variables for session handlers
+    const response = await requestContextStorage.run({ env, cspNonce: nonce }, () => {
       return requestHandler(request, {
         cloudflare: { env, ctx },
       });
@@ -109,11 +111,11 @@ export default {
       responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
     }
 
-    // Modern CSP configured for hCaptcha and Local Vite HMR support
+    const nonce = crypto.randomUUID();
     responseHeaders.set(
       "Content-Security-Policy",
       "default-src 'self'; " +
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.hcaptcha.com https://*.hcaptcha.com; " +
+      `script-src 'self' 'nonce-${nonce}' https://js.hcaptcha.com https://*.hcaptcha.com; ` +
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
       "font-src 'self' https://fonts.gstatic.com data:; " +
       "img-src 'self' data: https:; " +
