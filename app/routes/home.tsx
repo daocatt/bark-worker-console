@@ -88,8 +88,18 @@ export async function action({ request, context }: ActionFunctionArgs) {
       if (!barkApiUrl) return { error: "BARK_API_URL is not configured", intent };
       if (!deviceKey) return { error: "Device key is missing", intent };
 
+      let parsedUrl: URL;
       try {
-        const testUrl = `${barkApiUrl.replace(/\/$/, "")}/${deviceKey}/来自bark-worker-console的测试`;
+        parsedUrl = new URL(barkApiUrl);
+      } catch {
+        return { error: "BARK_API_URL is not a valid URL", intent };
+      }
+      if (parsedUrl.hostname === "localhost" || parsedUrl.hostname === "127.0.0.1" || parsedUrl.hostname.startsWith("192.168.") || parsedUrl.hostname.startsWith("10.") || parsedUrl.hostname.startsWith("172.")) {
+        return { error: "BARK_API_URL must not point to a private/internal address", intent };
+      }
+
+      try {
+        const testUrl = `${barkApiUrl.replace(/\/$/, "")}/${encodeURIComponent(deviceKey)}/${encodeURIComponent("来自bark-worker-console的测试")}`;
         const resp = await fetch(testUrl);
         const data = await resp.json() as any;
         if (resp.ok) {
