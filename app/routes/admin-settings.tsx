@@ -34,6 +34,11 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const settingValue = formData.get("settingValue")?.toString() === "true" ? "false" : "true";
     if (!settingKey) return { error: "Missing setting key" };
 
+    const allowedKeys = ["allow_registration", "force_register_to_use", "auto_cleanup_unlinked"];
+    if (!allowedKeys.includes(settingKey)) {
+      return { error: "Invalid setting key" };
+    }
+
     const existing = await db.query.settings.findFirst({ where: eq(settings.key, settingKey) });
     if (existing) {
       await db.update(settings).set({ value: settingValue }).where(eq(settings.key, settingKey));
