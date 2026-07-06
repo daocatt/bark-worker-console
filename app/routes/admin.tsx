@@ -22,7 +22,10 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     const allUserDevices = await db.query.userDevices.findMany();
 
     const usersWithKeys = otherUsers.map((u) => ({
-        ...u,
+        id: u.id,
+        username: u.username,
+        role: u.role,
+        createdAt: u.createdAt,
         keys: allUserDevices.filter((d) => d.userId === u.id),
     }));
 
