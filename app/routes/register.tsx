@@ -91,8 +91,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }).returning();
 
     if (isFirstUser) {
-        const userCount = await db.query.users.findMany();
-        if (userCount.length > 1) {
+        const allUsers = await db.query.users.findMany({
+            orderBy: (users, { asc }) => [asc(users.id)],
+        });
+        if (allUsers.length > 1 && allUsers[0].id !== newUser.id) {
             await db.update(users).set({ role: "user" }).where(eq(users.id, newUser.id));
             newUser.role = "user";
         }
