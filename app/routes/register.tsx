@@ -80,13 +80,23 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const isFirstUser = !existingUsers;
+
     const [newUser] = await db.insert(users).values({
         username,
         passwordHash,
-        role: existingUsers ? "user" : "admin",
+        role: isFirstUser ? "admin" : "user",
         mustChangePassword: 0,
         createdAt: Math.floor(Date.now() / 1000),
     }).returning();
+
+    if (isFirstUser) {
+        const userCount = await db.query.users.findMany();
+        if (userCount.length > 1) {
+            await db.update(users).set({ role: "user" }).where(eq(users.id, newUser.id));
+            newUser.role = "user";
+        }
+    }
 
     const session = await getSession(request.headers.get("Cookie"));
     session.set("userId", newUser.id);
