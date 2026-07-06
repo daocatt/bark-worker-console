@@ -94,9 +94,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
       } catch {
         return { error: "BARK_API_URL is not a valid URL", intent };
       }
-      if (parsedUrl.hostname === "localhost" || parsedUrl.hostname === "127.0.0.1" || parsedUrl.hostname.startsWith("192.168.") || parsedUrl.hostname.startsWith("10.") || parsedUrl.hostname.startsWith("172.")) {
-        return { error: "BARK_API_URL must not point to a private/internal address", intent };
-      }
 
       try {
         const testUrl = `${barkApiUrl.replace(/\/$/, "")}/${encodeURIComponent(deviceKey)}/${encodeURIComponent("来自bark-worker-console的测试")}`;
