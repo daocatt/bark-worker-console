@@ -9,11 +9,13 @@ import { commitSession, getSession } from "../auth/session.server";
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const db = getDb(context.cloudflare.env.database as D1Database);
 
+    const existingUsers = await db.query.users.findFirst();
+
     const allowRegSetting = await db.query.settings.findFirst({
         where: eq(settings.key, "allow_registration"),
     });
 
-    const isRegistrationAllowed = allowRegSetting?.value !== "false";
+    const isRegistrationAllowed = !existingUsers || allowRegSetting?.value !== "false";
 
     return {
         RegistrationDisabled: !isRegistrationAllowed,
@@ -24,11 +26,13 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 export async function action({ request, context }: ActionFunctionArgs) {
     const db = getDb(context.cloudflare.env.database as D1Database);
 
+    const existingUsers = await db.query.users.findFirst();
+
     const allowRegSetting = await db.query.settings.findFirst({
         where: eq(settings.key, "allow_registration"),
     });
 
-    if (allowRegSetting?.value === "false") {
+    if (existingUsers && allowRegSetting?.value === "false") {
         return { error: "Registration is currently disabled" };
     }
 
@@ -79,6 +83,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const [newUser] = await db.insert(users).values({
         username,
         passwordHash,
+        role: existingUsers ? "user" : "admin",
+        mustChangePassword: 0,
         createdAt: Math.floor(Date.now() / 1000),
     }).returning();
 
