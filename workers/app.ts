@@ -21,17 +21,18 @@ interface RateLimitData {
 }
 
 const rateLimitMap = new Map<string, RateLimitData>();
+let lastCleanup = Date.now();
 
 function checkRateLimit(ip: string, limit: number, windowMs: number): boolean {
   const now = Date.now();
-  
-  // Occasional map cleanup to prevent memory leaks
-  if (rateLimitMap.size > 1000) {
+
+  if (now - lastCleanup > 5 * 60 * 1000) {
     for (const [key, data] of rateLimitMap.entries()) {
       if (now > data.resetTime) {
         rateLimitMap.delete(key);
       }
     }
+    lastCleanup = now;
   }
 
   const data = rateLimitMap.get(ip);
