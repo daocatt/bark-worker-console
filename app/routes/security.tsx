@@ -37,7 +37,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
-    await db.update(users).set({ passwordHash }).where(eq(users.id, user.id));
+    await db.update(users).set({ passwordHash, mustChangePassword: 0 }).where(eq(users.id, user.id));
 
     return { success: "Password changed successfully" };
   }
