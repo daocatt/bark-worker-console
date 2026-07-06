@@ -11,9 +11,8 @@ export function getSessionSecret(): string {
   if (context?.env?.JWT_SECRET) {
     return context.env.JWT_SECRET;
   }
-  // Fallback to process.env.JWT_SECRET if available
   if (typeof process !== "undefined" && process.env?.JWT_SECRET) {
     return process.env.JWT_SECRET;
   }
-  return "s3cr3t_b4rk";
+  throw new Error("JWT_SECRET environment variable is required. Set it in wrangler.jsonc vars or .dev.vars");
 }
