@@ -7,23 +7,40 @@ import { eq } from "drizzle-orm";
 import { commitSession, getSession } from "../auth/session.server";
 import { getLoggedUser } from "../auth/auth.server";
 
+function generateRandomPassword(length: number = 16): string {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%&*";
+    const array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    return Array.from(array, (b) => chars[b % chars.length]).join("");
+}
+
 export async function loader({ request, context }: LoaderFunctionArgs) {
     const db = getDb(context.cloudflare.env.database as D1Database);
 
-    // Initialization: Create admin if no users exist
     const existingUsers = await db.query.users.findFirst();
     if (!existingUsers) {
-        const passwordHash = await bcrypt.hash("admin123", 10);
+        const randomPassword = generateRandomPassword();
+        const passwordHash = await bcrypt.hash(randomPassword, 10);
         await db.insert(users).values({
             username: "admin",
             passwordHash,
             role: "admin",
             createdAt: Math.floor(Date.now() / 1000),
+            mustChangePassword: 1,
         });
+        console.log("===========================================");
+        console.log("Initial admin account created!");
+        console.log(`Username: admin`);
+        console.log(`Password: ${randomPassword}`);
+        console.log("Please change this password after first login.");
+        console.log("===========================================");
     }
 
     const user = await getLoggedUser(request, context.cloudflare.env.database as D1Database);
     if (user) {
+        if ((user as any).mustChangePassword) {
+            return redirect("/security");
+        }
         return redirect("/");
     }
     
