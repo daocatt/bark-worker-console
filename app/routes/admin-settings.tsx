@@ -18,9 +18,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   const sysSettings = await db.query.settings.findMany();
   const allowRegistration = sysSettings.find((s) => s.key === "allow_registration")?.value !== "false";
   const forceRegisterToUse = sysSettings.find((s) => s.key === "force_register_to_use")?.value === "true";
-  const autoCleanupUnlinked = sysSettings.find((s) => s.key === "auto_cleanup_unlinked")?.value === "true";
 
-  return { admin, allowRegistration, forceRegisterToUse, autoCleanupUnlinked };
+  return { admin, allowRegistration, forceRegisterToUse };
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
@@ -34,7 +33,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     const settingValue = formData.get("settingValue")?.toString() === "true" ? "false" : "true";
     if (!settingKey) return { error: "Missing setting key" };
 
-    const allowedKeys = ["allow_registration", "force_register_to_use", "auto_cleanup_unlinked"];
+    const allowedKeys = ["allow_registration", "force_register_to_use"];
     if (!allowedKeys.includes(settingKey)) {
       return { error: "Invalid setting key" };
     }
@@ -49,11 +48,32 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return { success: `Setting updated successfully` };
   }
 
+  if (intent === "manual_cleanup") {
+    const { userDevices, devices } = await import("../drizzle/schema");
+    const { notInArray } = await import("drizzle-orm");
+
+    const linkedKeys = await db.query.userDevices.findMany({
+      columns: { deviceKey: true }
+    });
+    const linkedKeyList = linkedKeys.map(k => k.deviceKey);
+
+    let deletedCount = 0;
+    if (linkedKeyList.length > 0) {
+      const res = await db.delete(devices).where(notInArray(devices.key, linkedKeyList));
+      deletedCount = res.meta?.changes ?? 0;
+    } else {
+      const res = await db.delete(devices);
+      deletedCount = res.meta?.changes ?? 0;
+    }
+
+    return { success: `Manual cleanup completed! Deleted ${deletedCount} unlinked device key(s).` };
+  }
+
   return null;
 }
 
 export default function AdminSettings() {
-  const { admin, allowRegistration, forceRegisterToUse, autoCleanupUnlinked } = useLoaderData<typeof loader>();
+  const { admin, allowRegistration, forceRegisterToUse } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   return (
@@ -72,8 +92,14 @@ export default function AdminSettings() {
             </h2>
 
             {actionData?.success && (
-              <div className="bg-emerald-50 border-2 border-emerald-200 text-emerald-700 font-bold text-sm p-4 rounded-md mb-6">
+              <div className="bg-emerald-50 border-2 border-emerald-200 text-emerald-700 font-bold text-sm p-4 rounded-md mb-6 animate-pulse">
                 {actionData.success}
+              </div>
+            )}
+
+            {actionData?.error && (
+              <div className="bg-red-50 border-2 border-red-200 text-red-700 font-bold text-sm p-4 rounded-md mb-6">
+                {actionData.error}
               </div>
             )}
 
@@ -106,17 +132,15 @@ export default function AdminSettings() {
                 </button>
               </Form>
 
-              {/* Auto Cleanup Toggle */}
-              <Form method="post" className="flex items-center justify-between p-5 bg-emerald-50/50 rounded-md border-2 border-emerald-100 hover:border-emerald-300 transition-all gap-4">
-                <input type="hidden" name="intent" value="toggle_setting" />
-                <input type="hidden" name="settingKey" value="auto_cleanup_unlinked" />
-                <input type="hidden" name="settingValue" value={autoCleanupUnlinked ? "true" : "false"} />
+              {/* Manual Cleanup Button */}
+              <Form method="post" className="flex items-center justify-between p-5 bg-amber-50/40 rounded-md border-2 border-amber-100 hover:border-amber-300 transition-all gap-4">
+                <input type="hidden" name="intent" value="manual_cleanup" />
                 <div className="flex-1">
-                  <p className="font-bold text-emerald-900 text-sm">Auto Cleanup Unlinked Devices</p>
-                  <p className="text-xs font-medium text-emerald-600/80 mt-1 leading-relaxed">Automatically delete device keys that are not linked to any user every 72 hours.</p>
+                  <p className="font-bold text-amber-900 text-sm">Clean Up Unlinked Devices</p>
+                  <p className="text-xs font-medium text-amber-700/85 mt-1 leading-relaxed">Manually delete all device keys that are not linked to any registered user account to optimize D1 storage.</p>
                 </div>
-                <button type="submit" className={`relative inline-flex h-8 w-14 shrink-0 items-center rounded-full transition-all border-2 border-emerald-700 ${autoCleanupUnlinked ? 'bg-amber-500 border-amber-700' : 'bg-gray-200 border-gray-400'}`}>
-                  <span className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform ${autoCleanupUnlinked ? 'translate-x-6' : 'translate-x-0.5'}`} />
+                <button type="submit" className="bg-amber-500 hover:bg-amber-600 active:scale-95 transition-all text-white font-bold text-xs py-2 px-4 rounded-md border-2 border-amber-700 shadow-[2px_2px_0_0_rgba(180,83,9,0.2)]">
+                  Clean Now
                 </button>
               </Form>
             </div>
