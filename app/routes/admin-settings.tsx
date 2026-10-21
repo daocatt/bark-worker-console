@@ -7,8 +7,8 @@ import {
 } from "react-router";
 import { requireAdmin } from "../auth/auth.server";
 import { getDb } from "../drizzle/db.server";
-import { settings } from "../drizzle/schema";
-import { eq } from "drizzle-orm";
+import { settings, userDevices, devices } from "../drizzle/schema";
+import { eq, notInArray } from "drizzle-orm";
 import Nav from "../components/Nav";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
@@ -49,9 +49,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
   }
 
   if (intent === "manual_cleanup") {
-    const { userDevices, devices } = await import("../drizzle/schema");
-    const { notInArray } = await import("drizzle-orm");
-
     const linkedKeys = await db.query.userDevices.findMany({
       columns: { deviceKey: true }
     });
